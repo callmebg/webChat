@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <ipp ip={{ip}} port={{port}}></ipp>
+    <link href="/static/css/index.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/static/js/index.js"></script>
+</head>
+
+<body>
+    <div style="width: 800px;height: 600px;margin: 30px auto;text-align: center">
+        <h1>websocket聊天室</h1>
+        <div style="width: 800px;border: 1px solid gray;height: 300px;">
+            <div style="width: 200px;height: 300px;float: left;text-align: left;">
+                <p><span>当前在线:</span><span id="user_num">0</span></p>
+                <div id="user_list" style="overflow: auto;">
+
+                </div>
+            </div>
+            <div id="msg_list" style="width: 598px;border:  1px solid gray; height: 300px;overflow: scroll;float: left;">
+            </div>
+        </div>
+        <br>
+        <textarea id="msg_box" rows="6" cols="50" onkeydown="confirm(event)"></textarea><br>
+        <input type="button" value="发送" onclick="send()">
+    </div>
+</body>
+
+</html>
