@@ -1,0 +1,145 @@
+.content {
+    margin-top: 10px;
+    height: 800px;
+}
+
+
+
+.content .userImf {
+    float: left;
+    width: 290px;
+    height: 800px;
+    background-color: #ffffff;
+    border-radius: 3px;
+}
+
+.content .chatWrapper {
+    float: left;
+    margin-left: 10px;
+    width: 1300px;
+    height: 800px;
+    border-radius: 3px;
+}
+
+/*消息框样式*/
+.chatWrapper .msg {
+    position: relative;
+    height: 590px;
+    background-color: #fff;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.msg .msgItem {
+    display: block;
+    margin: 5px 5px 0px 5px;
+    width: 1290px;
+    border-radius: 3px;
+}
+
+.msgItem:hover {
+    background-color: #f3f3f3;
+}
+
+.msgItem .msgTag {
+    height: 30px;
+    line-height: 30px;
+    color: lightgray;
+}
+
+.msgTag .userName {
+    float: left;
+    margin-left: 10px;
+    font-size: 22px;
+    color: #3e93ef;
+    cursor: default;
+}
+
+.msgTag .msgTime {
+    float: left;
+    margin-left: 10px;
+    font-size: 16px;
+    cursor: default;
+}
+
+.msgText p {
+    margin-left: 15px;
+    padding: 5px;
+    width: 1265px;
+    font-size: 18px;
+}
+
+.msgSys {
+    display: block;
+    margin: 5px 5px 0px 5px;
+    width: 1290px;
+    height: 30px;
+    border-radius: 3px;
+    line-height: 30px;
+    font-size: 15px;
+    text-align: center;
+    color: #999999;
+    background-color: #f3f3f3;
+    cursor: default;
+}
+
+
+/*消息框样式*/
+
+/*输入样式*/
+
+.chatWrapper .inputArea {
+    margin-top: 10px;
+    height: 200px;
+    background-color: #fff;
+    border-radius: 3px;
+}
+
+.inputArea #userInput {
+    display: block;
+    padding: 10px;
+    width: 1280px;
+    height: 140px;
+    font-size: 18px;
+    font-family:"微软雅黑";
+    line-height: 22px;
+    outline: none;
+    border: none;
+    border-radius: 3px;
+    resize: none;
+}
+
+.inputArea .butWrapper {
+    height: 40px;
+    width: 1300px;
+    line-height: 40px;
+}
+
+.inputArea button {
+    float: right;
+    display: inline-block;
+    margin-right: 10px;
+    padding: 0 30px;
+    height: 36px;
+    color: white;
+    font-size: 18px;
+    line-height: 18px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+}
+.inputArea button:active {
+    opacity: 0.8;
+}
+
+.inputArea .delete {
+    margin-right: 5px;
+    background-color: lightgray;
+}
+
+.inputArea .send {
+    background-color: #3e93ef;
+}
+
+/*输入样式*/
