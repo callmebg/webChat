@@ -13,7 +13,7 @@ templates：存放html
 {
     'type':'login',
     'content':{
-        
+        //根据type不同，内容不同
     }
 }
 
