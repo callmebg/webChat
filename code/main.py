@@ -8,7 +8,6 @@ import websockets
 import multiprocessing
 from multiprocessing import Process
 from flask import Flask, render_template, request
-from gevent.pywsgi import WSGIServer
 
 IP = '127.0.0.1'
 PORT_WEB = 800

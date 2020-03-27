@@ -1,2 +1,5 @@
 chat.log
 web.log
+build/
+dist/
+__pycache__/
