@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['main.py'],
-             pathex=['E:\\GitHub\\webChat\\code'],
+             pathex=['C:\\Users\\dell\\Desktop\\软件2班-聊天室项目-汪丛彪\\code'],
              binaries=[],
              datas=[],
              hiddenimports=[],

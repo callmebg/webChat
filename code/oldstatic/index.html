@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>WebChat</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/content.css">
+    <link rel="stylesheet" href="/css/perfect-scrollbar.css">
+    <script src="/js/jquery-3.4.1.js"></script>
+    <script src="/js/perfect-scrollbar.js"></script>
+</head>
+
+<body>
+    <div class="mainWrapper">
+        <div class="header">
+            <p>WebChat聊天室</p>
+        </div>
+        <div class="content">
+            <div class="userImf">当前在线人数</div>
+            <div class="chatWrapper">
+                <div class="msg">
+                    <ul class="msgList">
+                    </ul>
+                </div>
+                <div class="inputArea">
+                    <textarea name="userInput" id="userInput" placeholder="请输入消息内容"></textarea>
+                    <div class="butWrapper">
+                        <button class="send">发送</button>
+                        <button class="delete">清空</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer"></div>
+    </div>
+
+
+
+    <h1>文件上传示例</h1>
+    <form action="/upFile" enctype='multipart/form-data' method='POST' target="_blank" onsubmit="fuck()">
+        <input type="file" name="file">
+        <input type="submit" value="上传" class="fuck4">
+    </form>
+    <script>
+        function fuck() {
+            var msg = {
+                'type': 'sendFile',
+                'data': {
+                    'fileName': 'all',
+                    'fileType': "picture",
+                    'url': 'upFiles/1.png'
+                        //這裡的url应该是我返回给你的。
+                }
+            }
+            sendMsg(msg);
+            console.log(msg);
+            return false;
+        }
+    </script>
+
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

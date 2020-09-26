@@ -1,113 +1,105 @@
 # -*- coding:utf8 -*-
+import basic
+import chat
+import sqlite3
 
+import time
 import json
-import socket
 import asyncio
-import logging
 import websockets
 import multiprocessing
 from multiprocessing import Process
-from flask import Flask, render_template, request
 
-IP = '127.0.0.1'
-PORT_WEB = 800
-PORT_CHAT = 1234
+import random
+import logging
+from datetime import datetime
+from flask import Flask, request, redirect
 
-# 此方法利用UDP协议，生成一个UDP包，将自己的IP放入UDP协议头中，然后再从中获取本机的IP。此方法虽然不会真实向外发包，但仍然会申请一个UDP的端口
-try:
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(('8.8.8.8', 80))
-    IP = s.getsockname()[0]
-finally:
-    s.close()
-
-
-# 保存字典 名字:websockets
-USERS = {}
-
-#提供html
-app = Flask(__name__)
-@app.route('/')
-@app.route('/index.html')
-def index_chat():
-    return render_template("index.html", ip=IP, port=PORT_CHAT)
-
-@app.route('/get_ipport')
-def get_ipport():
-    return json.dumps({"ip": IP, "port": PORT_CHAT})
-@app.errorhandler(404)
-def miss(e):
-    return "别瞎搞鸭"
-@app.errorhandler(500)
-def error(e):
-    return "服务器崩了"
-
-def web():
-    '''
-    logger = logging.getLogger()
-    file_handler = logging.FileHandler('web.log')
-    logger.addHandler(file_handler)
-    logger.setLevel(logging.INFO)'''
-
-    logging.basicConfig(format='%(levelname)s: %(message)s',
+def server():
+    #提供html
+    app = Flask(__name__, static_url_path="", static_folder="static")
+    @app.route("/")
+    @app.route("/index.html")
+    def index():
+        #return "fuck"
+        return app.send_static_file("index.html")
+    @app.route("/get_ipport")
+    def get_ipport():
+        return json.dumps({"ip": basic.IP, "port": basic.PORT_CHAT})
+    @app.route('/upload', methods=['POST', 'GET'])
+    def upload():
+        if request.method == 'POST':
+            f = request.files['file']
+            fuckPath = 'upload/' +  str(random.randint(0,999999999)) + str(f.filename)
+            f.save('static/' + fuckPath)
+            return fuckPath
+        else:
+            return "一个post接口，上传file"
+    @app.errorhandler(404)
+    def miss(e):
+        return "别瞎搞鸭"
+    @app.errorhandler(500)
+    def error(e):
+        return "服务器崩了"
+    logging.basicConfig(format="%(levelname)s: %(message)s",
                         filename="web.log",
                         level=logging.INFO)
-    app.run(host='0.0.0.0', port=PORT_WEB)
-
-
-#提供聊天的后台
-async def chat(websocket, path):
-    # 握手
-    await websocket.send(json.dumps({"type": "handshake"}))
-    async for message in websocket:
-        data = json.loads(message)
-        message = ''
-        # 用户发信息
-        if data["type"] == 'send':
-            name = '404'
-            for k, v in USERS.items():
-                if v == websocket:
-                    name = k
-            data["from"] = name
-            if len(USERS) != 0:  # asyncio.wait doesn't accept an empty list
-                message = json.dumps(
-                    {"type": "user", "content": data["content"], "from": name})
-        # 用户登录
-        elif data["type"] == 'login':
-            USERS[data["content"]] = websocket
-            if len(USERS) != 0:  # asyncio.wait doesn't accept an empty list
-                message = json.dumps(
-                    {"type": "login", "content": data["content"], "user_list": list(USERS.keys())})
-        # 用户退出
-        elif data["type"] == 'logout':
-            del USERS[data["content"]]
-            if len(USERS) != 0:  # asyncio.wait doesn't accept an empty list
-                message = json.dumps(
-                    {"type": "logout", "content": data["content"], "user_list": list(USERS.keys())})
-        #打印聊天信息到日志
-        logging.info(data)
-        # 群发
-        await asyncio.wait([user.send(message) for user in USERS.values()])
-
-def chat_server():
-    logging.basicConfig(format='%(asctime)s - %(pathname)s[line:%(lineno)d] - %(levelname)s: %(message)s',
-                        filename="chat.log",
-                        level=logging.INFO)
-    start_server = websockets.serve(chat, '0.0.0.0', PORT_CHAT)
-    asyncio.get_event_loop().run_until_complete(start_server)
-    asyncio.get_event_loop().run_forever()
+    app.run(host="0.0.0.0", port=basic.PORT_WEB, debug=False)
 
 
 if __name__ == "__main__":
     #俩进程
     multiprocessing.freeze_support()
-    
-    p_web = Process(target=web, daemon = True)
-    p_web.start()
-    p_chat_server = Process(target=chat_server, daemon = True)
+
+    conn = sqlite3.connect(basic.chatPath)
+    cursor = conn.cursor()
+
+    p_web_server = Process(target=server, daemon = True)
+    p_web_server.start()
+    p_chat_server = Process(target=chat.server, daemon = True)
     p_chat_server.start()
 
-    print("按下ctrl + c 结束程序。聊天和路由记录将分别保存在chat.log,web.log")
-    print("聊天室地址" + IP + ':' + str(PORT_WEB))
-    p_web.join()
+    #chat_server()
+    print(basic.help_message)
+    print("聊天室地址" + basic.IP + ":" + str(basic.PORT_WEB))
+
+    while True:
+        command = input(">>>")
+        if command == "exit":
+            break
+        elif command == "notice":
+            message = input("请输入公告：")
+            asyncio.get_event_loop().run_until_complete(chat.god(command, message))
+        elif command == "client":
+            message = input("请输入json：")
+            asyncio.get_event_loop().run_until_complete(chat.client_said(message))
+        elif command == "getOut":
+            message = input("请输入对方用户名：")
+            asyncio.get_event_loop().run_until_complete(chat.god(command, message))
+        elif command == "ban":
+            message = input("请输入对方用户名：")
+            asyncio.get_event_loop().run_until_complete(chat.god(command, message))
+        elif command == "remove":
+            message = input("请输入对方用户名：")
+            asyncio.get_event_loop().run_until_complete(chat.god(command, message))
+        elif command == "listOnline":
+            message = ""
+            asyncio.get_event_loop().run_until_complete(chat.god(command, message))
+        elif command == "sql":
+            sql = input("请输入sql：")
+            # 执行语句
+            results = cursor.execute(sql)
+
+            # 遍历打印输出
+            allAns = results.fetchall()
+            for ans in allAns:
+                print(ans)
+            conn.close()
+
+        elif command == "help":
+            print(basic.help_message)
+            
+    cursor.close()
+    p_web_server.terminate()
+    #p_web.join()
     p_chat_server.terminate()

@@ -1,0 +1,57 @@
+{
+    "login": {
+        "type": "login",
+        "data": {
+            "userName": "XXX",
+            "userList": ["张三", "李四"] //在线的人儿
+        }
+    },
+    "loginOver": {
+        "type": "iLogin",
+        "data": {
+            "status": 10000, //状态码
+            "content": "成功登陆", //状态信息
+            "userList": ["张三", "李四"] //在线的人儿
+        }
+    },
+    "logout": {
+        "type": "logout"
+    },
+    "recive": {
+        "type": "reciveText",
+        "data": {
+            "from": "xxx", //发信息人
+            "to": "xxx", //all 为所有人
+            "content": "fff", //信息，从文本框获取
+            "time": "2020-5-14 18:20:20" //发送时间
+        }
+    },
+    "recivePlus": {
+        "type": "reciveFile",
+        "data": {
+            "fileName": "文件名",
+            "fileType": "other", //或者picture、voice、video
+            "from": "xxx", //发信息人
+            "to": "xxx", //all 为所有人
+            "url": "fff", //存放在服务器的地址
+            "time": "2020-5-14 18:20:20" //发送时间
+        }
+    },
+    "recivePlusPlus": {
+        "type": "system",
+        "data": {
+            "content": "fff" //信息
+        }
+    },
+
+    "sendPlus": {
+        "type": "sendFile",
+        "data": {
+            "fileName": "文件名",
+            "fileType": "other", //或者picture、voice、video
+            "url": "fff", //存放在服务器的地址,由post返回的
+        }
+    }
+
+
+}
